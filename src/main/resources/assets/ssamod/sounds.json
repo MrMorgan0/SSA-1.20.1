@@ -1,0 +1,17 @@
+{
+
+  "rooster_morning": {
+    "category": "ambient",
+    "sounds": [
+      "ssamod:rooster_morning_sound"
+    ]
+  },
+
+  "wolf_evening": {
+    "category": "ambient",
+    "sounds": [
+      "ssamod:wolf_howl_sound"
+    ]
+  }
+
+}
