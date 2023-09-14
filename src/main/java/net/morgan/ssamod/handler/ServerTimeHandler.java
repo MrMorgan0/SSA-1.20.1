@@ -6,7 +6,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.morgan.ssamod.ModSounds;
+import net.morgan.ssamod.Config;
+import net.morgan.ssamod.ModRegistry;
 import net.morgan.ssamod.SSAMod;
 
 import java.util.Objects;
@@ -21,9 +22,9 @@ public final class ServerTimeHandler {
         LocalPlayer player = Minecraft.getInstance().player;
 
         if (worldTime == 2000) {
-            event.level.playSound(player, Objects.requireNonNull(player).getOnPos(), ModSounds.ROOSTER_MORNING.get(), SoundSource.WEATHER, 0.5f, 0f);
+            event.level.playSound(player, Objects.requireNonNull(player).getOnPos(), ModRegistry.ROOSTER_MORNING.get(), SoundSource.WEATHER, Config.rooster, 1f);
         } else if (worldTime == 12000) {
-            event.level.playSound(player, Objects.requireNonNull(player).getOnPos(), ModSounds.WOLF_EVENING.get(), SoundSource.WEATHER, 0.5f, 0f);
+            event.level.playSound(player, Objects.requireNonNull(player).getOnPos(), ModRegistry.WOLF_EVENING.get(), SoundSource.WEATHER, Config.wolf, 1f);
         }
 
     }

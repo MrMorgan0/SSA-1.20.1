@@ -14,25 +14,21 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
+
 @Mod(SSAMod.MOD_ID)
 public class SSAMod {
-    // Define mod id in a common place for everything to reference
     public static final String MOD_ID = "ssamod";
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public SSAMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
-        // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-        ModSounds.register(modEventBus);
+        ModRegistry.register(modEventBus);
 
-        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.SPEC);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -45,7 +41,6 @@ public class SSAMod {
 
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
