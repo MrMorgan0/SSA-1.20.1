@@ -6,8 +6,12 @@
   "gui.ssa.options": "Sunrise & Sunset Audio",
   "gui.ssa.options_rooster": "Rooster Morning",
   "gui.ssa.options_wolf": "Wolf Howling",
+  "gui.ssa.options_play_cave": "Play Sounds In Cave",
+  "gui.ssa.options_send_messages": "Underground Messages",
 
-  "gui.ssa.options_play_cave": "Play Sounds In Cave"
+  "messages.ssa.morning_message": "Morning...",
+  "messages.ssa.evening_message": "Evening...",
+  "gui.ssa.options_wolf_moon": "Wolf Howling Only Full Moon"
 
 
 }

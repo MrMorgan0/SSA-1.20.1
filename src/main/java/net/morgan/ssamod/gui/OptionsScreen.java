@@ -23,6 +23,8 @@ public class OptionsScreen extends Screen {
 	ForgeSlider roosterVolumeSlider;
 	ForgeSlider wolfVolumeSlider;
 	Checkbox playInCave;
+	Checkbox sendMessages;
+	Checkbox wolfOnlyFullMoon;
 
 	public OptionsScreen(Screen parent) {
 		super(Component.translatable("gui.ssa.options"));
@@ -44,13 +46,21 @@ public class OptionsScreen extends Screen {
 		playInCave = new Checkbox(width / 2 + 50, height / 2 + 20, 130, 20, Component.translatable("gui.ssa.options_play_cave"),
 				SoundsConfig.PLAY_IN_CAVE.get(), true);
 
+		sendMessages = new Checkbox(width / 2 + 50, height / 2 + 50, 130, 20, Component.translatable("gui.ssa.options_send_messages"),
+				SoundsConfig.SEND_MESSAGES.get(), true);
+
+		wolfOnlyFullMoon = new Checkbox(width / 2 + 50, height / 2 + 80, 130, 20, Component.translatable("gui.ssa.options_wolf_moon"),
+				SoundsConfig.WOLF_FULL_MOON.get(), true);
+
 		addRenderableWidget(roosterVolumeSlider);
 		addRenderableWidget(wolfVolumeSlider);
 		addRenderableWidget(playInCave);
+		addRenderableWidget(sendMessages);
+		addRenderableWidget(wolfOnlyFullMoon);
 
 		addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, w -> {
 			onClose();
-		}).bounds(width / 2 - 50, height / 2 + 50, 100, 20).build());
+		}).bounds(width / 2 - 50, height / 2 + 110, 100, 20).build());
 	}
 
 	@Override
@@ -108,6 +118,8 @@ public class OptionsScreen extends Screen {
 		SoundsConfig.ROOSTER.set((int) roosterVolumeSlider.getValue());
 		SoundsConfig.WOLF.set((int) wolfVolumeSlider.getValue());
 		SoundsConfig.PLAY_IN_CAVE.set(playInCave.selected());
+		SoundsConfig.SEND_MESSAGES.set(sendMessages.selected());
+		SoundsConfig.WOLF_FULL_MOON.set(wolfOnlyFullMoon.selected());
 
 	}
 
