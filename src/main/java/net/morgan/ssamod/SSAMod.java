@@ -12,6 +12,8 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
+import net.morgan.ssamod.config.Config;
 import org.slf4j.Logger;
 
 
@@ -23,12 +25,14 @@ public class SSAMod {
     public SSAMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CONFIG);
+        Config.loadConfig(Config.CONFIG, FMLPaths.CONFIGDIR.get().resolve("ssamod-client.toml").toString());
+
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
         ModRegistry.register(modEventBus);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.SPEC);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

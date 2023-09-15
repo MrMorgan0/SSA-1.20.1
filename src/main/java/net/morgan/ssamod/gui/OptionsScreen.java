@@ -3,7 +3,6 @@ package net.morgan.ssamod.gui;
 import java.util.Objects;
 
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Checkbox;
@@ -12,8 +11,9 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.gui.widget.ForgeSlider;
-import net.morgan.ssamod.Config;
+import net.morgan.ssamod.config.SoundsConfig;
 import net.morgan.ssamod.util.SmoothChasingValue;
+import org.jetbrains.annotations.NotNull;
 
 public class OptionsScreen extends Screen {
 
@@ -22,7 +22,6 @@ public class OptionsScreen extends Screen {
 
 	ForgeSlider roosterVolumeSlider;
 	ForgeSlider wolfVolumeSlider;
-
 	Checkbox playInCave;
 
 	public OptionsScreen(Screen parent) {
@@ -37,13 +36,13 @@ public class OptionsScreen extends Screen {
 		Objects.requireNonNull(minecraft);
 
 		roosterVolumeSlider = new ForgeSlider(width / 2 + 50, height / 2 - 10, 130, 20, Component.empty(),
-				Component.empty(), 0d, 100d, Config.rooster, true);
+				Component.empty(), 0d, 100d, SoundsConfig.ROOSTER.get(), true);
 
 		wolfVolumeSlider = new ForgeSlider(width / 2 + 50, height / 2 - 40, 130, 20, Component.empty(),
-				Component.empty(), 0d, 100d, Config.wolf, true);
+				Component.empty(), 0d, 100d, SoundsConfig.WOLF.get(), true);
 
 		playInCave = new Checkbox(width / 2 + 50, height / 2 + 20, 130, 20, Component.translatable("gui.ssa.options_play_cave"),
-				Config.playInCave, true);
+				SoundsConfig.PLAY_IN_CAVE.get(), true);
 
 		addRenderableWidget(roosterVolumeSlider);
 		addRenderableWidget(wolfVolumeSlider);
@@ -56,25 +55,30 @@ public class OptionsScreen extends Screen {
 
 	@Override
 	public void onClose() {
-		Config.setRoosterVolume(roosterVolumeSlider.getValue());
-		Config.setWolfVolume(wolfVolumeSlider.getValue());
-		Config.setPlayCave(playInCave.selected());
-		Config.save();
+
+		saveConfig();
+
 		Objects.requireNonNull(minecraft).setScreen(parent);
+
 	}
 
 	@Override
 	public void tick() {
+		// TODO: 9/15/2023 Optional. Future tick volume adjustment
+//		roosterVolumeValue = (int) roosterVolumeSlider.getValue();
+//		wolfVolumeValue = (int) wolfVolumeSlider.getValue();
+//		playInCaveValue = playInCave.selected();
+
 		super.tick();
 	}
 
 	@Override
-	public void render(GuiGraphics guiGraphics, int x, int y, float partialTicks) {
+	public void render(@NotNull GuiGraphics guiGraphics, int x, int y, float partialTicks) {
 		Objects.requireNonNull(minecraft);
 		renderBackground(guiGraphics);
 		boolean smallUI = minecraft.getWindow().getGuiScale() < 3;
 		int left = width / 2 - 105;
-		int top = height / 2 - 100;
+		int top = height / 2 - 150;
 		guiGraphics.pose().pushPose();
 		guiGraphics.pose().translate(left, top, 0);
 
@@ -99,5 +103,12 @@ public class OptionsScreen extends Screen {
 		guiGraphics.pose().popPose();
 	}
 
+	private void saveConfig() {
+
+		SoundsConfig.ROOSTER.set((int) roosterVolumeSlider.getValue());
+		SoundsConfig.WOLF.set((int) wolfVolumeSlider.getValue());
+		SoundsConfig.PLAY_IN_CAVE.set(playInCave.selected());
+
+	}
 
 }

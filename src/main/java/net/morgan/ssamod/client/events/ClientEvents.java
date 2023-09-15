@@ -11,6 +11,7 @@ import net.morgan.ssamod.gui.OptionsScreen;
 import net.morgan.ssamod.util.KeyBinding;
 
 
+
 public class ClientEvents {
 
     @Mod.EventBusSubscriber(modid = SSAMod.MOD_ID, value = Dist.CLIENT)
@@ -20,9 +21,7 @@ public class ClientEvents {
         public static void onKeyInput (InputEvent.Key event) {
 
             if (KeyBinding.OPTIONS_KEY.consumeClick()) {
-
                 Minecraft.getInstance().setScreen(new OptionsScreen(null));
-
             }
 
         }

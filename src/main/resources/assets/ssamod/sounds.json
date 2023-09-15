@@ -10,7 +10,10 @@
   "wolf_evening": {
     "category": "ambient",
     "sounds": [
-      "ssamod:wolf_howl_sound"
+      {
+        "name": "ssamod:wolf_howl_sound",
+        "stream": true
+      }
     ]
   }
 

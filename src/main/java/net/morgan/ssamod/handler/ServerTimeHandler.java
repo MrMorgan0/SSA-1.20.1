@@ -2,15 +2,13 @@ package net.morgan.ssamod.handler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.morgan.ssamod.Config;
 import net.morgan.ssamod.ModRegistry;
 import net.morgan.ssamod.SSAMod;
+import net.morgan.ssamod.config.SoundsConfig;
 
-import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = SSAMod.MOD_ID)
 public final class ServerTimeHandler {
@@ -21,10 +19,15 @@ public final class ServerTimeHandler {
         long worldTime = event.level.getLevelData().getDayTime();
         LocalPlayer player = Minecraft.getInstance().player;
 
-        if (worldTime == 2000) {
-            event.level.playSound(player, Objects.requireNonNull(player).getOnPos(), ModRegistry.ROOSTER_MORNING.get(), SoundSource.WEATHER, Config.rooster, 1f);
-        } else if (worldTime == 12000) {
-            event.level.playSound(player, Objects.requireNonNull(player).getOnPos(), ModRegistry.WOLF_EVENING.get(), SoundSource.WEATHER, Config.wolf, 1f);
+        assert player != null;
+        if (worldTime == 0) {
+            float roosterVolume = SoundsConfig.ROOSTER.get() / 100.0f;
+            player.playSound(ModRegistry.ROOSTER_MORNING.get(), roosterVolume, 1f);
+            //event.level.playSound(player, player.getOnPos(), ModRegistry.ROOSTER_MORNING.get(), SoundSource.AMBIENT, 0.9f, 1f);
+        } else if (worldTime == 13000) {
+            float wolfVolume = SoundsConfig.WOLF.get() / 100.0f;
+            player.playSound(ModRegistry.WOLF_EVENING.get(), wolfVolume, 1f);
+            //event.level.playSound(player, player.getOnPos(), ModRegistry.WOLF_EVENING.get(), SoundSource.AMBIENT, 0.1f, 1f);
         }
 
     }
