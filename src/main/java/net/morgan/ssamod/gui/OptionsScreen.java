@@ -3,15 +3,21 @@ package net.morgan.ssamod.gui;
 import java.util.Objects;
 
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.client.gui.widget.ForgeSlider;
+import net.morgan.ssamod.ModRegistry;
 import net.morgan.ssamod.config.SoundsConfig;
+import net.morgan.ssamod.handler.SoundHandler;
 import net.morgan.ssamod.util.SmoothChasingValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,11 +26,12 @@ public class OptionsScreen extends Screen {
 	private final Screen parent;
 	private final SmoothChasingValue titleY;
 
+	private final SoundManager soundManager = Minecraft.getInstance().getSoundManager();
+
 	ForgeSlider roosterVolumeSlider;
 	ForgeSlider wolfVolumeSlider;
 	Checkbox playInCave;
 	Checkbox sendMessages;
-	Checkbox wolfOnlyFullMoon;
 
 	public OptionsScreen(Screen parent) {
 		super(Component.translatable("gui.ssa.options"));
@@ -49,18 +56,24 @@ public class OptionsScreen extends Screen {
 		sendMessages = new Checkbox(width / 2 + 50, height / 2 + 50, 130, 20, Component.translatable("gui.ssa.options_send_messages"),
 				SoundsConfig.SEND_MESSAGES.get(), true);
 
-		wolfOnlyFullMoon = new Checkbox(width / 2 + 50, height / 2 + 80, 130, 20, Component.translatable("gui.ssa.options_wolf_moon"),
-				SoundsConfig.WOLF_FULL_MOON.get(), true);
-
 		addRenderableWidget(roosterVolumeSlider);
 		addRenderableWidget(wolfVolumeSlider);
 		addRenderableWidget(playInCave);
 		addRenderableWidget(sendMessages);
-		addRenderableWidget(wolfOnlyFullMoon);
 
 		addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, w -> {
 			onClose();
-		}).bounds(width / 2 - 50, height / 2 + 110, 100, 20).build());
+		}).bounds(width / 2 - 50, height / 2 + 100, 100, 20).build());
+
+		addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_rooster"), w -> {
+			soundManager.stop();
+			SoundHandler.playSoundForPlayer(ModRegistry.ROOSTER_MORNING.get(), roosterVolumeSlider.getValueInt(), 1f);
+		}).bounds(width / 2 - 100, height / 2 + 20, 100, 20).build());
+
+		addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_wolf"), w -> {
+			soundManager.stop();
+			SoundHandler.playSoundForPlayer(ModRegistry.WOLF_EVENING.get(), wolfVolumeSlider.getValueInt(), 1f);
+		}).bounds(width / 2 - 100, height / 2 + 50, 100, 20).build());
 	}
 
 	@Override
@@ -68,17 +81,13 @@ public class OptionsScreen extends Screen {
 
 		saveConfig();
 
+		soundManager.stop();
 		Objects.requireNonNull(minecraft).setScreen(parent);
 
 	}
 
 	@Override
 	public void tick() {
-		// TODO: 9/15/2023 Optional. Future tick volume adjustment
-//		roosterVolumeValue = (int) roosterVolumeSlider.getValue();
-//		wolfVolumeValue = (int) wolfVolumeSlider.getValue();
-//		playInCaveValue = playInCave.selected();
-
 		super.tick();
 	}
 
@@ -119,7 +128,6 @@ public class OptionsScreen extends Screen {
 		SoundsConfig.WOLF.set((int) wolfVolumeSlider.getValue());
 		SoundsConfig.PLAY_IN_CAVE.set(playInCave.selected());
 		SoundsConfig.SEND_MESSAGES.set(sendMessages.selected());
-		SoundsConfig.WOLF_FULL_MOON.set(wolfOnlyFullMoon.selected());
 
 	}
 
