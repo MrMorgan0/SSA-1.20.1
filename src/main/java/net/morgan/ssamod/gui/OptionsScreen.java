@@ -4,7 +4,6 @@ import java.util.Objects;
 
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Checkbox;
@@ -13,7 +12,6 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.client.gui.widget.ForgeSlider;
 import net.morgan.ssamod.ModRegistry;
 import net.morgan.ssamod.config.SoundsConfig;
@@ -44,6 +42,9 @@ public class OptionsScreen extends Screen {
 	protected void init() {
 		Objects.requireNonNull(minecraft);
 
+		minecraft.getSoundManager().pause();
+
+
 		roosterVolumeSlider = new ForgeSlider(width / 2 + 50, height / 2 - 10, 130, 20, Component.empty(),
 				Component.empty(), 0d, 100d, SoundsConfig.ROOSTER.get(), true);
 
@@ -66,22 +67,24 @@ public class OptionsScreen extends Screen {
 		}).bounds(width / 2 - 50, height / 2 + 100, 100, 20).build());
 
 		addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_rooster"), w -> {
-			soundManager.stop();
+			soundManager.stop(ModRegistry.ROOSTER_MORNING.get().getLocation(), null);
 			SoundHandler.playSoundForPlayer(ModRegistry.ROOSTER_MORNING.get(), roosterVolumeSlider.getValueInt(), 1f);
 		}).bounds(width / 2 - 100, height / 2 + 20, 100, 20).build());
 
 		addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_wolf"), w -> {
-			soundManager.stop();
+			soundManager.stop(ModRegistry.WOLF_EVENING.get().getLocation(), null);
 			SoundHandler.playSoundForPlayer(ModRegistry.WOLF_EVENING.get(), wolfVolumeSlider.getValueInt(), 1f);
 		}).bounds(width / 2 - 100, height / 2 + 50, 100, 20).build());
 	}
 
 	@Override
 	public void onClose() {
-
 		saveConfig();
 
-		soundManager.stop();
+		soundManager.stop(ModRegistry.ROOSTER_MORNING.get().getLocation(), null);
+		soundManager.stop(ModRegistry.WOLF_EVENING.get().getLocation(), null);
+
+		Objects.requireNonNull(minecraft).getSoundManager().resume();
 		Objects.requireNonNull(minecraft).setScreen(parent);
 
 	}
