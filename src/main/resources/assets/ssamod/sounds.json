@@ -1,14 +1,17 @@
 {
 
   "rooster_morning": {
-    "category": "ambient",
+    "subtitle": "messages.ssa.morning_message",
     "sounds": [
-      "ssamod:rooster_morning_sound"
+      {
+        "name": "ssamod:rooster_morning_sound",
+        "stream": true
+      }
     ]
   },
 
   "wolf_evening": {
-    "category": "ambient",
+    "subtitle": "messages.ssa.evening_message",
     "sounds": [
       {
         "name": "ssamod:wolf_howl_sound",

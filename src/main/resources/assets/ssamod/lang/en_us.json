@@ -8,9 +8,12 @@
   "gui.ssa.options_wolf": "Wolf Howl",
   "gui.ssa.options_play_cave": "Play Sounds In Cave",
   "gui.ssa.options_send_messages": "Send Messages",
+  "gui.ssa.options_update": "New version of mod is available!",
+  "gui.ssa.options_mod_page": "Mod Page",
 
   "messages.ssa.morning_message": "Morning...",
   "messages.ssa.evening_message": "Evening..."
+
 
 
 }

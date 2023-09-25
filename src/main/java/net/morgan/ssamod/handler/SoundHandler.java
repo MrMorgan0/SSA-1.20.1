@@ -1,19 +1,34 @@
 package net.morgan.ssamod.handler;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.morgan.ssamod.gui.OptionsScreen;
+import net.morgan.ssamod.util.GameUtils;
 
+@OnlyIn(Dist.CLIENT)
 public class SoundHandler {
 
-    public static void playSoundForPlayer(SoundEvent sound, float volume, float pitch) {
+    public static int tempCount = 0;
 
-        LocalPlayer player = Minecraft.getInstance().player;
-        volume = ((volume +  Minecraft.getInstance().options.getSoundSourceVolume(SoundSource.MASTER)) / 2) / 100;
+    public static void playSoundForPlayerOnce(SoundEvent sound, float volume, float pitch) {
 
-        if (player != null) {
+        Player player = GameUtils.getPlayer();
+        if (volume != 0)
+            volume = ((volume + GameUtils.getGameSettings().getSoundSourceVolume(SoundSource.MASTER)) / 2) / 100;
+
+        if (player == null) return;
+
+        if (GameUtils.getMC().screen instanceof OptionsScreen) {
+
             player.playSound(sound, volume, pitch);
+
+        } else {
+
+            player.playSound(sound, volume, pitch);
+
         }
 
     }

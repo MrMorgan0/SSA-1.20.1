@@ -17,7 +17,7 @@ public class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec CONFIG;
 
-    static  {
+    static {
 
         SoundsConfig.init(BUILDER);
 

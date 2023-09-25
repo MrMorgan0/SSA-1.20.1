@@ -9,7 +9,7 @@ public class SoundsConfig {
     public static ForgeConfigSpec.IntValue ROOSTER;
     public static ForgeConfigSpec.IntValue WOLF;
 
-    public  static void init(ForgeConfigSpec.Builder client) {
+    public static void init(ForgeConfigSpec.Builder client) {
 
         PLAY_IN_CAVE = client.comment("Play sound in cave").define("play_in_cave", false);
         SEND_MESSAGES = client.comment("Send messages").define("send_messages", true);

@@ -16,7 +16,7 @@ public class ModRegistry {
     public static final RegistryObject<SoundEvent> WOLF_EVENING = registerSoundEvent("wolf_evening");
 
 
-    private static RegistryObject<SoundEvent> registerSoundEvent(String name)  {
+    private static RegistryObject<SoundEvent> registerSoundEvent(String name) {
         return SOUND_EVENTS_REGISTRY.register(name, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(SSAMod.MOD_ID, name)));
     }
 
