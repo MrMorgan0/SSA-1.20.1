@@ -1,1 +1,10 @@
-
+{
+  "homepage": "https://www.curseforge.com/minecraft/mc-mods/sunrise-sunset-audio/files",
+  "<mcversion>": {
+    "<modversion>": "Fixed bugs", 
+  },
+  "promos": {
+    "<mcversion>-latest": "0.3",
+    "<mcversion>-recommended": "0.3",
+  }
+}
