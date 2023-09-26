@@ -12,10 +12,11 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.network.NetworkConstants;
 import net.morgan.ssamod.config.Config;
 import net.morgan.ssamod.handler.SoundHandler;
 import org.slf4j.Logger;
+
+import static net.minecraftforge.fml.IExtensionPoint.DisplayTest.IGNORESERVERONLY;
 
 
 @Mod(SSAMod.MOD_ID)
@@ -38,7 +39,7 @@ public class SSAMod {
 
         DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> SoundHandler::new);
         ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () ->
-                new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
+                new IExtensionPoint.DisplayTest(() -> IGNORESERVERONLY, (a, b) -> true));
 
     }
 
