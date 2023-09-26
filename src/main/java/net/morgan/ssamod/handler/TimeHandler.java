@@ -20,25 +20,23 @@ public final class TimeHandler {
             return;
         }
 
-        long worldTime = event.level.getDayTime();
+        int worldTime = (int) event.level.getDayTime();
         int dayCount = (int) Math.floor((double) worldTime / 24000);
 
-        if (worldTime == (dayCount * 24000L) + 90 || worldTime == (dayCount * 24000L) + 12990){
+        if (worldTime == (dayCount * 24000) + 90 || worldTime == (dayCount * 24000) + 12990) {
             SoundHandler.tempCount = 0;
         }
 
-        if (worldTime == (dayCount * 24000L) + 100) {
+        if (worldTime == (dayCount * 24000) + 100) {
 
             if (SoundHandler.tempCount == 0) {
                 playRoosterSound(SoundsConfig.PLAY_IN_CAVE.get(), SoundsConfig.ROOSTER.get());
-                SoundHandler.tempCount++;
             }
 
-        } else if (worldTime == (dayCount * 24000L) + 13000) {
+        } else if (worldTime == (dayCount * 24000) + 13000) {
 
             if (SoundHandler.tempCount == 0) {
                 playWolfSound(SoundsConfig.PLAY_IN_CAVE.get(), SoundsConfig.WOLF.get());
-                SoundHandler.tempCount++;
             }
 
         }

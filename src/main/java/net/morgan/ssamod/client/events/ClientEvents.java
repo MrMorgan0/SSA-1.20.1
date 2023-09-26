@@ -1,28 +1,33 @@
 package net.morgan.ssamod.client.events;
 
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.morgan.ssamod.SSAMod;
 import net.morgan.ssamod.gui.OptionsScreen;
+import net.morgan.ssamod.util.GameUtils;
 import net.morgan.ssamod.util.KeyBinding;
 
 
 public class ClientEvents {
 
-    private static final Minecraft minecraft = Minecraft.getInstance();
-
     @Mod.EventBusSubscriber(modid = SSAMod.MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
+
+        @SubscribeEvent
+        public static void onClientSetup(FMLClientSetupEvent event) {
+
+
+        }
 
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
 
             if (KeyBinding.OPTIONS_KEY.consumeClick()) {
-                minecraft.setScreen(new OptionsScreen(null));
+                GameUtils.getMC().setScreen(new OptionsScreen(null));
             }
 
         }

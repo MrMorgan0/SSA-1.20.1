@@ -6,18 +6,15 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.IExtensionPoint;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.VersionChecker;
+import net.minecraftforge.fml.*;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.network.NetworkConstants;
 import net.morgan.ssamod.config.Config;
+import net.morgan.ssamod.handler.SoundHandler;
 import org.slf4j.Logger;
 
 
@@ -39,13 +36,13 @@ public class SSAMod {
         MinecraftForge.EVENT_BUS.register(this);
         ModRegistry.register(modEventBus);
 
+        DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> SoundHandler::new);
         ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () ->
                 new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
 
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-
 
     }
 
@@ -54,12 +51,4 @@ public class SSAMod {
 
     }
 
-    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-
-
-        }
-    }
 }

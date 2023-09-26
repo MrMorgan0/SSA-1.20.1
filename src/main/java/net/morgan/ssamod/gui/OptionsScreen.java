@@ -1,7 +1,5 @@
 package net.morgan.ssamod.gui;
 
-import java.awt.*;
-import java.net.*;
 import java.util.*;
 
 
@@ -72,27 +70,9 @@ public class OptionsScreen extends Screen {
         addRenderableWidget(playInCave);
         addRenderableWidget(sendMessages);
 
-        if (isModUpdateAvailable()) {
-
-            addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, w -> {
-                onClose();
-            }).bounds(width / 2 + 20, height / 2 + 80, 100, 20).build());
-
-            addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_mod_page"), w -> {
-                try {
-                    openWebpage(getModPageURL().toURI());
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                }
-            }).bounds(width / 2 - 100, height / 2 + 80, 100, 20).build());
-
-        } else {
-
-            addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, w -> {
-                onClose();
-            }).bounds(width / 2 - 50, height / 2 + 80, 100, 20).build());
-
-        }
+        addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, w -> {
+            onClose();
+        }).bounds(width / 2 - 50, height / 2 + 80, 100, 20).build());
 
         addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_rooster"), w -> {
             soundManager.stop(ModRegistry.ROOSTER_MORNING.get().getLocation(), null);
@@ -167,31 +147,6 @@ public class OptionsScreen extends Screen {
 
     private boolean isModUpdateAvailable() {
         return SSAMod.MOD_VERSION.equals(VersionChecker.Status.OUTDATED.name());
-    }
-
-    private boolean openWebpage(URI uri) {
-
-
-        Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-        if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
-            try {
-                desktop.browse(uri);
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-    private URL getModPageURL() {
-        URL url = null;
-        try {
-            url = new URL("https://www.curseforge.com/minecraft/mc-mods/sunrise-sunset-audio/files");
-        } catch (MalformedURLException e) {
-            SSAMod.LOGGER.error("Incorrect URL!");
-        }
-        return url;
     }
 
     private void drawFancyText(GuiGraphics guiGraphics, String text, float y, float x, int posY, int posX) {
