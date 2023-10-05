@@ -1,4 +1,4 @@
-package net.morgan.ssamod;
+package net.morgan.ssamod.registery;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -6,6 +6,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.morgan.ssamod.SSAMod;
 
 public class ModRegistry {
 
@@ -23,5 +24,6 @@ public class ModRegistry {
     public static void register(IEventBus eventBus) {
         SOUND_EVENTS_REGISTRY.register(eventBus);
     }
+
 
 }

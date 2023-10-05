@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.gui.widget.ForgeSlider;
 import net.minecraftforge.fml.VersionChecker;
-import net.morgan.ssamod.ModRegistry;
+import net.morgan.ssamod.registery.ModRegistry;
 import net.morgan.ssamod.SSAMod;
 import net.morgan.ssamod.config.SoundsConfig;
 import net.morgan.ssamod.handler.SoundHandler;

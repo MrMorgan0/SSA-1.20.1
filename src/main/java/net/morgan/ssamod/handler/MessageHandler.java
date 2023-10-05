@@ -7,10 +7,10 @@ import net.morgan.ssamod.config.SoundsConfig;
 
 public class MessageHandler {
 
-    public static void sendMessage(Player player, boolean isMorning) {
+    public static void sendMessage(Player player, boolean isRooster) {
 
         if (SoundsConfig.SEND_MESSAGES.get()) {
-            if (isMorning) {
+            if (isRooster) {
                 player.displayClientMessage(Component.translatable("messages.ssa.morning_message").
                         withStyle(ChatFormatting.BOLD, ChatFormatting.ITALIC), true);
             } else {
