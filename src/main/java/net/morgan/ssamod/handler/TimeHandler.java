@@ -12,7 +12,6 @@ import net.morgan.ssamod.util.GameUtils;
 @Mod.EventBusSubscriber(modid = SSAMod.MOD_ID)
 public final class TimeHandler {
 
-
     @SubscribeEvent
     public static void onWorldTick(final TickEvent.ClientTickEvent.ServerTickEvent.LevelTickEvent event) {
 
@@ -23,17 +22,18 @@ public final class TimeHandler {
         int worldTime = (int) event.level.getDayTime();
         int dayCount = (int) Math.floor((double) worldTime / 24000);
 
-        if (worldTime == (dayCount * 24000) + 90 || worldTime == (dayCount * 24000) + 12990) {
+        if (worldTime == (dayCount * 24000) + SoundsConfig.MORNING_TICK.get() - 10 ||
+                worldTime == (dayCount * 24000) + SoundsConfig.EVENING_TICK.get() - 10) {
             SoundHandler.tempCount = 0;
         }
 
-        if (worldTime == (dayCount * 24000) + 100) {
+        if (worldTime == (dayCount * 24000) + SoundsConfig.MORNING_TICK.get()) {
 
             if (SoundHandler.tempCount == 0) {
                 playSound(true, SoundsConfig.PLAY_IN_CAVE.get(), SoundsConfig.ROOSTER.get());
             }
 
-        } else if (worldTime == (dayCount * 24000) + 13000) {
+        } else if (worldTime == (dayCount * 24000) + SoundsConfig.EVENING_TICK.get()) {
 
             if (SoundHandler.tempCount == 0) {
                 playSound(false, SoundsConfig.PLAY_IN_CAVE.get(), SoundsConfig.WOLF.get());
@@ -79,7 +79,7 @@ public final class TimeHandler {
             else SSAMod.LOGGER.error("SSA Mod " + ModRegistry.WOLF_EVENING.getId() + " is missing");
         }
 
-        MessageHandler.sendMessage(GameUtils.getPlayer(), isRooster);
+        MessageHandler.sendInformationMessage(GameUtils.getPlayer(), isRooster);
 
     }
 
