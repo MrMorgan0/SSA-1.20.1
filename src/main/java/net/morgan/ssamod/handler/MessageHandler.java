@@ -3,14 +3,17 @@ package net.morgan.ssamod.handler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import net.morgan.ssamod.SSAMod;
 import net.morgan.ssamod.config.SoundsConfig;
+
+import javax.annotation.Nullable;
 
 public class MessageHandler {
 
-    public static void sendMessage(Player player, boolean isMorning) {
+    public static void sendInformationMessage(Player player, boolean isRooster) {
 
         if (SoundsConfig.SEND_MESSAGES.get()) {
-            if (isMorning) {
+            if (isRooster) {
                 player.displayClientMessage(Component.translatable("messages.ssa.morning_message").
                         withStyle(ChatFormatting.BOLD, ChatFormatting.ITALIC), true);
             } else {
@@ -19,6 +22,13 @@ public class MessageHandler {
             }
 
         }
+
+    }
+
+    public static void sendMessage(@Nullable Player player, Component message) {
+
+        if (player != null) player.displayClientMessage(message,true);
+        else SSAMod.LOGGER.error("SSA Mod can't get Player, because player is null");
 
     }
 

@@ -8,6 +8,8 @@ public class SoundsConfig {
     public static ForgeConfigSpec.BooleanValue SEND_MESSAGES;
     public static ForgeConfigSpec.IntValue ROOSTER;
     public static ForgeConfigSpec.IntValue WOLF;
+    public static ForgeConfigSpec.IntValue MORNING_TICK;
+    public static ForgeConfigSpec.IntValue EVENING_TICK;
 
     public static void init(ForgeConfigSpec.Builder client) {
 
@@ -15,6 +17,8 @@ public class SoundsConfig {
         SEND_MESSAGES = client.comment("Send messages").define("send_messages", true);
         ROOSTER = client.comment("Rooster volume").defineInRange("rooster_volume", 50, 0, 100);
         WOLF = client.comment("Wolf volume").defineInRange("wolf_volume", 50, 0, 100);
+        MORNING_TICK = client.comment("When should crow Rooster? (time in ticks)").defineInRange("morning_tick", 100, 10, 23999);
+        EVENING_TICK = client.comment("When should howl Wolf? (time in ticks)").defineInRange("evening_tick", 13000, 10, 23999);
 
     }
 

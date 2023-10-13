@@ -3,9 +3,11 @@ package net.morgan.ssamod.gui;
 import java.util.*;
 
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Checkbox;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.sounds.SoundManager;
@@ -15,7 +17,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.gui.widget.ForgeSlider;
 import net.minecraftforge.fml.VersionChecker;
-import net.morgan.ssamod.ModRegistry;
+import net.morgan.ssamod.handler.MessageHandler;
+import net.morgan.ssamod.registery.ModRegistry;
 import net.morgan.ssamod.SSAMod;
 import net.morgan.ssamod.config.SoundsConfig;
 import net.morgan.ssamod.handler.SoundHandler;
@@ -30,11 +33,12 @@ public class OptionsScreen extends Screen {
     private final Screen parent;
     private final SmoothChasingValue titleY;
     private final SmoothChasingValue updateX;
-
     private final SoundManager soundManager = GameUtils.getSoundManager();
 
     ForgeSlider roosterVolumeSlider;
     ForgeSlider wolfVolumeSlider;
+    EditBox morningTick;
+    EditBox eveningTick;
     Checkbox playInCave;
     Checkbox sendMessages;
 
@@ -53,38 +57,64 @@ public class OptionsScreen extends Screen {
         GameUtils.getMC().pauseGame(true);
         if (GameUtils.getMC().isSingleplayer()) soundManager.pause();
 
-        roosterVolumeSlider = new ForgeSlider(width / 2 + 50, height / 2 - 10, 130, 20, Component.empty(),
+        roosterVolumeSlider = new ForgeSlider(width / 2 + 30, height / 2 - 10, 80, 20, Component.translatable("gui.ssa.options_slider_rooster"),
                 Component.empty(), 0d, 100d, SoundsConfig.ROOSTER.get(), true);
 
-        wolfVolumeSlider = new ForgeSlider(width / 2 + 50, height / 2 - 40, 130, 20, Component.empty(),
+        wolfVolumeSlider = new ForgeSlider(width / 2 + 30, height / 2 - 40, 80, 20, Component.translatable("gui.ssa.options_slider_wolf"),
                 Component.empty(), 0d, 100d, SoundsConfig.WOLF.get(), true);
 
-        playInCave = new Checkbox(width / 2 + 50, height / 2 + 20, 130, 20, Component.translatable("gui.ssa.options_play_cave"),
+        morningTick = new EditBox(font, width / 2 + 30, height / 2 + 20, 105, 20,
+                Component.empty());
+
+        eveningTick = new EditBox(font, width / 2 + 30, height / 2 + 50, 105, 20,
+                Component.empty());
+
+        playInCave = new Checkbox(width / 2 - 130, height / 2 - 10, 130, 20, Component.translatable("gui.ssa.options_play_cave"),
                 SoundsConfig.PLAY_IN_CAVE.get(), true);
 
-        sendMessages = new Checkbox(width / 2 + 50, height / 2 + 50, 130, 20, Component.translatable("gui.ssa.options_send_messages"),
+        sendMessages = new Checkbox(width / 2 - 130, height / 2 - 40, 130, 20, Component.translatable("gui.ssa.options_send_messages"),
                 SoundsConfig.SEND_MESSAGES.get(), true);
 
+        morningTick.setValue(SoundsConfig.MORNING_TICK.get().toString());
+        eveningTick.setValue(SoundsConfig.EVENING_TICK.get().toString());
+
+        //Sliders
         addRenderableWidget(roosterVolumeSlider);
         addRenderableWidget(wolfVolumeSlider);
+        //EditBox
+        addRenderableWidget(morningTick);
+        addRenderableWidget(eveningTick);
+        //CheckBoxes
         addRenderableWidget(playInCave);
         addRenderableWidget(sendMessages);
 
+        //Buttons
+        addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_reset"), w -> {
+
+            roosterVolumeSlider.setValue(SoundsConfig.ROOSTER.getDefault());
+            wolfVolumeSlider.setValue(SoundsConfig.WOLF.getDefault());
+            morningTick.setValue(SoundsConfig.MORNING_TICK.getDefault().toString());
+            eveningTick.setValue(SoundsConfig.EVENING_TICK.getDefault().toString());
+
+            saveConfig();
+
+        }).bounds(width / 2 - 120, height / 2 + 80, 100, 20).build());
+
         addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, w -> {
             onClose();
-        }).bounds(width / 2 - 50, height / 2 + 80, 100, 20).build());
+        }).bounds(width / 2 + 30, height / 2 + 80, 100, 20).build());
 
-        addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_rooster"), w -> {
+        addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_play"), w -> {
             soundManager.stop(ModRegistry.ROOSTER_MORNING.get().getLocation(), null);
             soundManager.stop(ModRegistry.WOLF_EVENING.get().getLocation(), null);
             SoundHandler.playSoundForPlayerOnce(ModRegistry.ROOSTER_MORNING.get(), roosterVolumeSlider.getValueInt(), 1f);
-        }).bounds(width / 2 - 100, height / 2 + 20, 100, 20).build());
+        }).bounds(width / 2 + 120, height / 2 - 10, 20, 20).build());
 
-        addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_wolf"), w -> {
+        addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_play"), w -> {
             soundManager.stop(ModRegistry.ROOSTER_MORNING.get().getLocation(), null);
             soundManager.stop(ModRegistry.WOLF_EVENING.get().getLocation(), null);
             SoundHandler.playSoundForPlayerOnce(ModRegistry.WOLF_EVENING.get(), wolfVolumeSlider.getValueInt(), 1f);
-        }).bounds(width / 2 - 100, height / 2 + 50, 100, 20).build());
+        }).bounds(width / 2 + 120, height / 2 - 40, 20, 20).build());
 
     }
 
@@ -134,8 +164,8 @@ public class OptionsScreen extends Screen {
 
         guiGraphics.pose().popPose();
 
-        guiGraphics.drawString(font, Component.translatable("gui.ssa.options_rooster"), width / 2 - 130, height / 2, 0xFFFFFFFF);
-        guiGraphics.drawString(font, Component.translatable("gui.ssa.options_wolf"), width / 2 - 130, height / 2 - 30, 0xFFFFFFFF);
+        guiGraphics.drawString(font, Component.translatable("gui.ssa.options_morning_tick"), width / 2 - 130, height / 2 + 25, 0xFFFFFFFF);
+        guiGraphics.drawString(font, Component.translatable("gui.ssa.options_evening_tick"), width / 2 - 130, height / 2 + 55, 0xFFFFFFFF);
 
         if (isModUpdateAvailable()) {
             updateX.tick(partialTicks);
@@ -162,6 +192,51 @@ public class OptionsScreen extends Screen {
         SoundsConfig.WOLF.set((int) wolfVolumeSlider.getValue());
         SoundsConfig.PLAY_IN_CAVE.set(playInCave.selected());
         SoundsConfig.SEND_MESSAGES.set(sendMessages.selected());
+
+        try {
+
+            int value = Integer.parseInt(morningTick.getValue());
+            int tempValue = Integer.parseInt(eveningTick.getValue());
+
+            if (value > 23999) SoundsConfig.MORNING_TICK.set(23999);
+            else SoundsConfig.MORNING_TICK.set(Math.max(value, 10));
+
+            if (value == tempValue) {
+                MessageHandler.sendMessage(GameUtils.getPlayer(), Component.translatable("messages.ssa.error_message_same_value").
+                        withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
+                SoundsConfig.MORNING_TICK.set(SoundsConfig.MORNING_TICK.getDefault());
+                return;
+            }
+
+        } catch (NumberFormatException e) {
+
+            SoundsConfig.MORNING_TICK.set(SoundsConfig.MORNING_TICK.getDefault());
+            MessageHandler.sendMessage(GameUtils.getPlayer(), Component.translatable("messages.ssa.error_message_invalid_value").
+                    withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
+
+        }
+
+        try {
+
+            int value = Integer.parseInt(eveningTick.getValue());
+            int tempValue = Integer.parseInt(morningTick.getValue());
+
+            if (value > 23999) SoundsConfig.EVENING_TICK.set(23999);
+            else SoundsConfig.EVENING_TICK.set(Math.max(value, 10));
+
+            if (value == tempValue) {
+                MessageHandler.sendMessage(GameUtils.getPlayer(), Component.translatable("messages.ssa.error_message_same_value").
+                        withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
+                SoundsConfig.EVENING_TICK.set(SoundsConfig.EVENING_TICK.getDefault());
+            }
+
+        } catch (NumberFormatException e) {
+
+            SoundsConfig.EVENING_TICK.set(SoundsConfig.EVENING_TICK.getDefault());
+            MessageHandler.sendMessage(GameUtils.getPlayer(), Component.translatable("messages.ssa.error_message_invalid_value").
+                    withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
+
+        }
 
     }
 

@@ -14,6 +14,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.morgan.ssamod.config.Config;
 import net.morgan.ssamod.handler.SoundHandler;
+import net.morgan.ssamod.registery.ModRegistry;
 import org.slf4j.Logger;
 
 import static net.minecraftforge.fml.IExtensionPoint.DisplayTest.IGNORESERVERONLY;
