@@ -17,6 +17,8 @@
   "messages.ssa.morning_message": "Morning...",
   "messages.ssa.evening_message": "Evening...",
   "messages.ssa.error_message_invalid_value": "Invalid Value!! Set to Default",
-  "messages.ssa.error_message_same_value": "Values Can't be Same!! Set to Default"
+  "messages.ssa.error_message_same_value": "Values Can't be Same!! Set to Default",
+  "gui.ssa.options_play_in_other_dim": "Play Sounds In Other Dimensions",
+  "gui.ssa.options_send_messages_in_other_dim": "Send Messages In Other Dimensions"
 
 }

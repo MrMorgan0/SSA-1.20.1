@@ -1,6 +1,8 @@
 package net.morgan.ssamod.handler;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -9,15 +11,17 @@ import net.morgan.ssamod.SSAMod;
 import net.morgan.ssamod.config.SoundsConfig;
 import net.morgan.ssamod.util.GameUtils;
 
+import static net.minecraft.world.level.Level.OVERWORLD;
+
 @Mod.EventBusSubscriber(modid = SSAMod.MOD_ID)
 public final class TimeHandler {
+
+    public static ResourceKey<Level> PLAYER_CURRENT_DIMENSION;
 
     @SubscribeEvent
     public static void onWorldTick(final TickEvent.ClientTickEvent.ServerTickEvent.LevelTickEvent event) {
 
-        if (GameUtils.getPlayer() == null) {
-            return;
-        }
+        if (GameUtils.getPlayer() == null) return;
 
         int worldTime = (int) event.level.getDayTime();
         int dayCount = (int) Math.floor((double) worldTime / 24000);
@@ -30,22 +34,24 @@ public final class TimeHandler {
         if (worldTime == (dayCount * 24000) + SoundsConfig.MORNING_TICK.get()) {
 
             if (SoundHandler.tempCount == 0) {
-                playSound(true, SoundsConfig.PLAY_IN_CAVE.get(), SoundsConfig.ROOSTER.get());
+                playSound(true);
             }
 
         } else if (worldTime == (dayCount * 24000) + SoundsConfig.EVENING_TICK.get()) {
 
             if (SoundHandler.tempCount == 0) {
-                playSound(false, SoundsConfig.PLAY_IN_CAVE.get(), SoundsConfig.WOLF.get());
+                playSound(false);
             }
 
         }
 
     }
 
-    private static void playSound(boolean isRooster, boolean playInCave, float volume) {
+    private static void playSound(boolean isRooster) {
 
         BlockPos blockPos;
+        boolean playInCave = SoundsConfig.PLAY_IN_CAVE.get();
+        float volume = isRooster ? SoundsConfig.ROOSTER.get() : SoundsConfig.WOLF.get();
 
         try {
 
@@ -61,6 +67,10 @@ public final class TimeHandler {
             e.printStackTrace();
             return;
         }
+
+        MessageHandler.sendInformationMessage(GameUtils.getPlayer(), isRooster);
+
+        if (PLAYER_CURRENT_DIMENSION != null && !PLAYER_CURRENT_DIMENSION.equals(OVERWORLD) && !SoundsConfig.PLAY_IN_OTHER_DIM.get()) return;
 
         if (ModRegistry.ROOSTER_MORNING.isPresent() && isRooster || ModRegistry.WOLF_EVENING.isPresent() && !isRooster) {
 
@@ -78,8 +88,6 @@ public final class TimeHandler {
             if (isRooster) SSAMod.LOGGER.error("SSA Mod " + ModRegistry.ROOSTER_MORNING.getId() + " is missing");
             else SSAMod.LOGGER.error("SSA Mod " + ModRegistry.WOLF_EVENING.getId() + " is missing");
         }
-
-        MessageHandler.sendInformationMessage(GameUtils.getPlayer(), isRooster);
 
     }
 
