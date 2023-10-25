@@ -42,6 +42,9 @@ public class OptionsScreen extends Screen {
     Checkbox playInCave;
     Checkbox sendMessages;
 
+    Checkbox playInOtherDim;
+    Checkbox sendMessagesInOtherDim;
+
     public OptionsScreen(Screen parent) {
         super(Component.translatable("gui.ssa.options"));
         this.parent = parent;
@@ -69,11 +72,19 @@ public class OptionsScreen extends Screen {
         eveningTick = new EditBox(font, width / 2 + 30, height / 2 + 50, 105, 20,
                 Component.empty());
 
-        playInCave = new Checkbox(width / 2 - 130, height / 2 - 10, 130, 20, Component.translatable("gui.ssa.options_play_cave"),
+        playInCave = new Checkbox(width / 2 - 130, height / 2 - 10, 100, 20, Component.translatable("gui.ssa.options_play_cave"),
                 SoundsConfig.PLAY_IN_CAVE.get(), true);
 
-        sendMessages = new Checkbox(width / 2 - 130, height / 2 - 40, 130, 20, Component.translatable("gui.ssa.options_send_messages"),
+        sendMessages = new Checkbox(width / 2 - 130, height / 2 - 40, 100, 20, Component.translatable("gui.ssa.options_send_messages"),
                 SoundsConfig.SEND_MESSAGES.get(), true);
+
+        playInOtherDim = new Checkbox(width / 2 - 130, height / 2 + 80, 100, 20,
+                Component.translatable("gui.ssa.options_play_in_other_dim"), SoundsConfig.PLAY_IN_OTHER_DIM.get(),
+                true);
+
+        sendMessagesInOtherDim = new Checkbox(width / 2 - 130, height / 2 + 110, 100, 20,
+                Component.translatable("gui.ssa.options_send_messages_in_other_dim"),
+                SoundsConfig.SEND_MESSAGES_IN_OTHER_DIM.get(), true);
 
         morningTick.setValue(SoundsConfig.MORNING_TICK.get().toString());
         eveningTick.setValue(SoundsConfig.EVENING_TICK.get().toString());
@@ -87,6 +98,8 @@ public class OptionsScreen extends Screen {
         //CheckBoxes
         addRenderableWidget(playInCave);
         addRenderableWidget(sendMessages);
+        addRenderableWidget(playInOtherDim);
+        addRenderableWidget(sendMessagesInOtherDim);
 
         //Buttons
         addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_reset"), w -> {
@@ -98,11 +111,10 @@ public class OptionsScreen extends Screen {
 
             saveConfig();
 
-        }).bounds(width / 2 - 120, height / 2 + 80, 100, 20).build());
+        }).bounds(width / 2 - 120, height / 2 + 140, 100, 20).build());
 
-        addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, w -> {
-            onClose();
-        }).bounds(width / 2 + 30, height / 2 + 80, 100, 20).build());
+        addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, w -> onClose())
+                .bounds(width / 2 + 30, height / 2 + 140, 100, 20).build());
 
         addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_play"), w -> {
             soundManager.stop(ModRegistry.ROOSTER_MORNING.get().getLocation(), null);
@@ -149,7 +161,7 @@ public class OptionsScreen extends Screen {
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int x, int y, float partialTicks) {
         Objects.requireNonNull(minecraft);
-        renderBackground(guiGraphics, x, y, partialTicks);
+        renderBackground(guiGraphics);
         boolean smallUI = minecraft.getWindow().getGuiScale() < 3;
         int left = width / 2 - 105;
         int top = height / 2 - 150;
@@ -192,6 +204,8 @@ public class OptionsScreen extends Screen {
         SoundsConfig.WOLF.set((int) wolfVolumeSlider.getValue());
         SoundsConfig.PLAY_IN_CAVE.set(playInCave.selected());
         SoundsConfig.SEND_MESSAGES.set(sendMessages.selected());
+        SoundsConfig.PLAY_IN_OTHER_DIM.set(playInOtherDim.selected());
+        SoundsConfig.SEND_MESSAGES_IN_OTHER_DIM.set(sendMessagesInOtherDim.selected());
 
         try {
 

@@ -8,9 +8,13 @@ import net.morgan.ssamod.config.SoundsConfig;
 
 import javax.annotation.Nullable;
 
+import static net.minecraft.world.level.Level.OVERWORLD;
+
 public class MessageHandler {
 
     public static void sendInformationMessage(Player player, boolean isRooster) {
+
+        if (!SoundsConfig.SEND_MESSAGES_IN_OTHER_DIM.get() && !TimeHandler.PLAYER_CURRENT_DIMENSION.equals(OVERWORLD)) return;
 
         if (SoundsConfig.SEND_MESSAGES.get()) {
             if (isRooster) {

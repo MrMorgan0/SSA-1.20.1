@@ -25,4 +25,5 @@ public class ModRegistry {
         SOUND_EVENTS_REGISTRY.register(eventBus);
     }
 
+
 }
