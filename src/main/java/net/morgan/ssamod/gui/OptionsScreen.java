@@ -161,7 +161,7 @@ public class OptionsScreen extends Screen {
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int x, int y, float partialTicks) {
         Objects.requireNonNull(minecraft);
-        renderBackground(guiGraphics);
+        renderBackground(guiGraphics, x, y, partialTicks);
         boolean smallUI = minecraft.getWindow().getGuiScale() < 3;
         int left = width / 2 - 105;
         int top = height / 2 - 150;
