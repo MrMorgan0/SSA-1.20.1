@@ -11,6 +11,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public final class GameUtils {
     private GameUtils() {
@@ -60,5 +61,9 @@ public final class GameUtils {
     @OnlyIn(Dist.CLIENT)
     public static boolean isFirstPersonView() {
         return getGameSettings().getCameraType() == CameraType.FIRST_PERSON;
+    }
+
+    public static int generateRandomNumber(int range) {
+        return new Random().nextInt(range);
     }
 }

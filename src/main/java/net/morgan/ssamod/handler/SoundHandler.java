@@ -8,25 +8,38 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.morgan.ssamod.SSAMod;
 import net.morgan.ssamod.util.GameUtils;
 
+
 @OnlyIn(Dist.CLIENT)
 public class SoundHandler {
 
     public static int tempCount = 0;
 
-    public static void playSoundForPlayerOnce(SoundEvent sound, float volume, float pitch) {
+    public static void playSoundForPlayerOnce(SoundEvent sound, int chance, float volume, float pitch) {
 
         Player player = GameUtils.getPlayer();
+
         if (player == null) return;
 
         if (volume != 0)
             volume = ((volume + GameUtils.getGameSettings().getSoundSourceVolume(SoundSource.MASTER)) / 2) / 100;
 
         try {
-            player.playSound(sound, volume, pitch);
+            if (calculateChance(chance)) player.playSound(sound, volume, pitch);
             tempCount++;
         } catch (IllegalStateException e) {
             SSAMod.LOGGER.error("SSA mod can't get access to player");
         }
+
+    }
+
+    private static boolean calculateChance(int chance) {
+
+        int randomNumber = GameUtils.generateRandomNumber(101);
+
+        if (chance == 100) return true;
+        if (chance == 0) return false;
+
+        return randomNumber <= chance;
 
     }
 

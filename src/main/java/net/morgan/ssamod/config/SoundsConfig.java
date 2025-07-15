@@ -2,6 +2,7 @@ package net.morgan.ssamod.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
+
 public class SoundsConfig {
 
     public static ForgeConfigSpec.BooleanValue PLAY_IN_CAVE;
@@ -12,6 +13,10 @@ public class SoundsConfig {
     public static ForgeConfigSpec.IntValue WOLF;
     public static ForgeConfigSpec.IntValue MORNING_TICK;
     public static ForgeConfigSpec.IntValue EVENING_TICK;
+    public static ForgeConfigSpec.IntValue CHANCE_ROOSTER;
+    public static ForgeConfigSpec.IntValue CHANCE_WOLF;
+
+    public static ForgeConfigSpec.ConfigValue<String> CURRENT_PHASE;
 
     public static void init(ForgeConfigSpec.Builder client) {
 
@@ -23,6 +28,10 @@ public class SoundsConfig {
         WOLF = client.comment("Wolf volume").defineInRange("wolf_volume", 50, 0, 100);
         MORNING_TICK = client.comment("When should crow Rooster? (time in ticks)").defineInRange("morning_tick", 100, 10, 23999);
         EVENING_TICK = client.comment("When should howl Wolf? (time in ticks)").defineInRange("evening_tick", 13000, 10, 23999);
+        CHANCE_ROOSTER = client.comment("Chance to play Rooster sound").defineInRange("chance_rooster", 100, 0, 100);
+        CHANCE_WOLF = client.comment("Chance to play Wolf sound").defineInRange("chance_wolf", 100, 0, 100);
+
+        CURRENT_PHASE = client.comment("Current moon phase").define("moon_phase", "All");
 
     }
 

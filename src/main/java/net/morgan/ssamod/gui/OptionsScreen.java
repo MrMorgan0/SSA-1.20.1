@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.sounds.SoundManager;
@@ -15,6 +16,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 import net.minecraftforge.client.gui.widget.ForgeSlider;
 import net.minecraftforge.fml.VersionChecker;
 import net.morgan.ssamod.handler.MessageHandler;
@@ -37,6 +39,9 @@ public class OptionsScreen extends Screen {
 
     ForgeSlider roosterVolumeSlider;
     ForgeSlider wolfVolumeSlider;
+    ForgeSlider chanceOfPlayingWolfSound;
+    ForgeSlider chanceOfPlayingRoosterSound;
+    ExtendedButton moonPhase;
     EditBox morningTick;
     EditBox eveningTick;
     Checkbox playInCave;
@@ -66,6 +71,24 @@ public class OptionsScreen extends Screen {
         wolfVolumeSlider = new ForgeSlider(width / 2 + 30, height / 2 - 40, 80, 20, Component.translatable("gui.ssa.options_slider_wolf"),
                 Component.empty(), 0d, 100d, SoundsConfig.WOLF.get(), true);
 
+        chanceOfPlayingRoosterSound = new ForgeSlider(width / 2 + 160, height / 2 - 10, 100, 20, Component.translatable("gui.ssa.options_chance_rooster"),
+                Component.translatable("gui.ssa.options_percent"), 0d, 100d, SoundsConfig.CHANCE_ROOSTER.get(),true);
+
+        chanceOfPlayingWolfSound = new ForgeSlider(width / 2 + 160, height / 2 - 40, 100, 20, Component.translatable("gui.ssa.options_chance_wolf"),
+                Component.translatable("gui.ssa.options_percent"), 0d, 100d, SoundsConfig.CHANCE_WOLF.get(),true);
+
+        moonPhase = new ExtendedButton(width / 2 + 160, height / 2 + 20, 100, 20, Component.literal(SoundsConfig.CURRENT_PHASE.get()), button -> {
+
+            if (SoundsConfig.CURRENT_PHASE.get().equals("All")) {
+                moonPhase.setMessage(Component.literal("Full Moon"));
+                SoundsConfig.CURRENT_PHASE.set("Full Moon");
+            } else if (SoundsConfig.CURRENT_PHASE.get().equals("Full Moon")) {
+                moonPhase.setMessage(Component.literal("All"));
+                SoundsConfig.CURRENT_PHASE.set("All");
+            }
+
+        });
+
         morningTick = new EditBox(font, width / 2 + 30, height / 2 + 20, 105, 20,
                 Component.empty());
 
@@ -91,7 +114,9 @@ public class OptionsScreen extends Screen {
 
         //Sliders
         addRenderableWidget(roosterVolumeSlider);
+        addRenderableWidget(chanceOfPlayingRoosterSound);
         addRenderableWidget(wolfVolumeSlider);
+        addRenderableWidget(chanceOfPlayingWolfSound);
         //EditBox
         addRenderableWidget(morningTick);
         addRenderableWidget(eveningTick);
@@ -102,12 +127,21 @@ public class OptionsScreen extends Screen {
         addRenderableWidget(sendMessagesInOtherDim);
 
         //Buttons
+        addRenderableWidget(moonPhase).setTooltip(Tooltip.create(Component.translatable("gui.ssa.options_moon_phase_tooltip")));
         addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_reset"), w -> {
 
             roosterVolumeSlider.setValue(SoundsConfig.ROOSTER.getDefault());
+            chanceOfPlayingRoosterSound.setValue(SoundsConfig.CHANCE_ROOSTER.getDefault());
             wolfVolumeSlider.setValue(SoundsConfig.WOLF.getDefault());
+            chanceOfPlayingWolfSound.setValue(SoundsConfig.CHANCE_WOLF.getDefault());
             morningTick.setValue(SoundsConfig.MORNING_TICK.getDefault().toString());
             eveningTick.setValue(SoundsConfig.EVENING_TICK.getDefault().toString());
+            moonPhase.setMessage(Component.literal("All"));
+
+            if (!sendMessages.selected()) sendMessages.onPress();
+            if (playInCave.selected()) playInCave.onPress();
+            if (playInOtherDim.selected()) playInOtherDim.onPress();
+            if (sendMessagesInOtherDim.selected()) sendMessagesInOtherDim.onPress();
 
             saveConfig();
 
@@ -119,13 +153,13 @@ public class OptionsScreen extends Screen {
         addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_play"), w -> {
             soundManager.stop(ModRegistry.ROOSTER_MORNING.get().getLocation(), null);
             soundManager.stop(ModRegistry.WOLF_EVENING.get().getLocation(), null);
-            SoundHandler.playSoundForPlayerOnce(ModRegistry.ROOSTER_MORNING.get(), roosterVolumeSlider.getValueInt(), 1f);
+            SoundHandler.playSoundForPlayerOnce(ModRegistry.ROOSTER_MORNING.get(), 100, roosterVolumeSlider.getValueInt(), 1f);
         }).bounds(width / 2 + 120, height / 2 - 10, 20, 20).build());
 
         addRenderableWidget(Button.builder(Component.translatable("gui.ssa.options_play"), w -> {
             soundManager.stop(ModRegistry.ROOSTER_MORNING.get().getLocation(), null);
             soundManager.stop(ModRegistry.WOLF_EVENING.get().getLocation(), null);
-            SoundHandler.playSoundForPlayerOnce(ModRegistry.WOLF_EVENING.get(), wolfVolumeSlider.getValueInt(), 1f);
+            SoundHandler.playSoundForPlayerOnce(ModRegistry.WOLF_EVENING.get(), 100,  wolfVolumeSlider.getValueInt(), 1f);
         }).bounds(width / 2 + 120, height / 2 - 40, 20, 20).build());
 
     }
@@ -201,11 +235,14 @@ public class OptionsScreen extends Screen {
     private void saveConfig() {
 
         SoundsConfig.ROOSTER.set((int) roosterVolumeSlider.getValue());
+        SoundsConfig.CHANCE_ROOSTER.set((int) chanceOfPlayingRoosterSound.getValue());
         SoundsConfig.WOLF.set((int) wolfVolumeSlider.getValue());
+        SoundsConfig.CHANCE_WOLF.set((int) chanceOfPlayingWolfSound.getValue());
         SoundsConfig.PLAY_IN_CAVE.set(playInCave.selected());
         SoundsConfig.SEND_MESSAGES.set(sendMessages.selected());
         SoundsConfig.PLAY_IN_OTHER_DIM.set(playInOtherDim.selected());
         SoundsConfig.SEND_MESSAGES_IN_OTHER_DIM.set(sendMessagesInOtherDim.selected());
+        SoundsConfig.CURRENT_PHASE.set(moonPhase.getMessage().getString());
 
         try {
 

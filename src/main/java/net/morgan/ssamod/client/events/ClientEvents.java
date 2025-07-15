@@ -39,7 +39,7 @@ public class ClientEvents {
         public static void onDimensionChange(EntityTravelToDimensionEvent event) {
 
             TimeHandler.PLAYER_CURRENT_DIMENSION = event.getDimension();
-            SSAMod.LOGGER.info("Dimension changed to" + event.getDimension());
+            //SSAMod.LOGGER.info("Dimension changed to" + event.getDimension()); Commented to reduce lags in long runs
 
         }
 
@@ -50,7 +50,7 @@ public class ClientEvents {
                     !TimeHandler.PLAYER_CURRENT_DIMENSION.equals(event.getLevel().dimension())) {
 
                 TimeHandler.PLAYER_CURRENT_DIMENSION = event.getLevel().dimension();
-                SSAMod.LOGGER.info("Joined to" + event.getLevel().dimension());
+                //SSAMod.LOGGER.info("Joined to" + event.getLevel().dimension()); Commented to reduce lags in long runs
 
             }
 

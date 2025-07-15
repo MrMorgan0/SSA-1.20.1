@@ -16,15 +16,22 @@ public class MessageHandler {
 
         if (!SoundsConfig.SEND_MESSAGES_IN_OTHER_DIM.get() && !TimeHandler.PLAYER_CURRENT_DIMENSION.equals(OVERWORLD)) return;
 
-        if (SoundsConfig.SEND_MESSAGES.get()) {
-            if (isRooster) {
-                player.displayClientMessage(Component.translatable("messages.ssa.morning_message").
-                        withStyle(ChatFormatting.BOLD, ChatFormatting.ITALIC), true);
-            } else {
-                player.displayClientMessage(Component.translatable("messages.ssa.evening_message").
-                        withStyle(ChatFormatting.BOLD, ChatFormatting.ITALIC), true);
+        try {
+
+            if (SoundsConfig.SEND_MESSAGES.get()) {
+                if (isRooster) {
+                    player.displayClientMessage(Component.translatable("messages.ssa.morning_message").
+                            withStyle(ChatFormatting.BOLD, ChatFormatting.ITALIC), true);
+                } else {
+                    player.displayClientMessage(Component.translatable("messages.ssa.evening_message").
+                            withStyle(ChatFormatting.BOLD, ChatFormatting.ITALIC), true);
+                }
+
             }
 
+        } catch (Exception exception) {
+            SSAMod.LOGGER.error("SSA Mod can't show message, ActionBar is busy");
+            exception.fillInStackTrace();
         }
 
     }
