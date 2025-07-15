@@ -12,7 +12,8 @@
     "0.4": "Fixed crash when wake up bed",
     "0.5": "New feature - choose the tick!",
     "0.6": "Fixed bug with Illegal State",
-    "0.7": "New Feature! Now player able to turn off other dimension rooster/wolf sounds!"
+    "0.7": "New Feature! Now player able to turn off other dimension rooster/wolf sounds!",
+    "0.8": "Fixed some bugs, changed Wolf sound sample to 44.1 HZ."
   },
   "1.20.2": {
     "0.3": "Updated to 1.20.2",
@@ -21,7 +22,7 @@
   },
   "promos": {
     "1.19.2-latest": "0.7",
-    "1.20.1-latest": "0.7",
+    "1.20.1-latest": "0.8",
     "1.20.2-latest": "0.7"
   }
 }
