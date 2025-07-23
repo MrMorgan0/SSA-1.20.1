@@ -1,0 +1,23 @@
+{
+
+  "rooster_morning": {
+    "subtitle": "messages.ssa.morning_message",
+    "sounds": [
+      {
+        "name": "ssamod:rooster_morning_sound",
+        "stream": true
+      }
+    ]
+  },
+
+  "wolf_evening": {
+    "subtitle": "messages.ssa.evening_message",
+    "sounds": [
+      {
+        "name": "ssamod:wolf_howl_sound",
+        "stream": true
+      }
+    ]
+  }
+
+}
